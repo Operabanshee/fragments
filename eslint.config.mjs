@@ -8,7 +8,10 @@ export default defineConfig([
     plugins: { js },
     extends: ['js/recommended'],
     languageOptions: {
-      globals: globals.node, // ✅ FIXED
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
     },
   },
   {
