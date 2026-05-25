@@ -41,3 +41,27 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+
+  unit-tests:
+    # Give your job a name that will show up in the GitHub Actions web UI
+    name: Unit Tests
+    # We'll run this on a Linux (Ubuntu) VM, since we'll deploy on Linux too.
+    runs-on: ubuntu-latest
+    # We run these steps one after the other, and if any fail, we stop the process
+    steps:
+      # https://github.com/actions/checkout
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      # https://github.com/actions/setup-node
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          # Use node LTS https://github.com/actions/setup-node#supported-version-syntax
+          node-version: 'lts/*'
+          # Cache npm dependencies so they don't have to be downloaded next time - https://github.com/actions/setup-node#caching-packages-dependencies
+          cache: 'npm'
+
+      - name: Install node dependencies and run Tests
+        # Use `install-ci-test` to install dependencies with `npm ci` and run `npm test`
+        run: npm install-ci-test
