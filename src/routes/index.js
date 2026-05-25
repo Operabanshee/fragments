@@ -2,6 +2,7 @@ const express = require('express');
 
 // Our authentication middleware
 const { authenticate } = require('../auth');
+const { createErrorResponse, createSuccessResponse } = require('../response');
 
 // version and author from package.json
 const { version, author } = require('../../package.json');
@@ -11,13 +12,7 @@ const router = express.Router();
 
 const requireAuth = (req, res, next) => {
   if (!req.user) {
-    return res.status(401).json({
-      status: 'error',
-      error: {
-        message: 'Unauthorized',
-        code: 401,
-      },
-    });
+    return res.status(401).json(createErrorResponse(401, 'Unauthorized'));
   }
 
   next();
@@ -38,15 +33,14 @@ router.get('/', (req, res) => {
   // Client's shouldn't cache this response (always request it fresh)
   res.setHeader('Cache-Control', 'no-cache');
   // Send a 200 'OK' response
-  res.status(200).json({
-    status: 'ok',
+  res.status(200).json(createSuccessResponse({
     description: 'fragments service running normally',
     author,
     // TODO: change this to use your GitHub username!
     githubUrl: 'https://github.com/REPLACE_WITH_YOUR_GITHUB_USERNAME/fragments',
     version,
     timestamp: new Date().toISOString(),
-  });
+  }));
 });
 
 module.exports = router;
