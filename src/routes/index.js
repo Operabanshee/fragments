@@ -37,7 +37,7 @@ router.get('/', (req, res) => {
     description: 'fragments service running normally',
     author,
     // TODO: change this to use your GitHub username!
-    githubUrl: 'https://github.com/REPLACE_WITH_YOUR_GITHUB_USERNAME/fragments',
+    githubUrl: 'https://github.com/Operabanshee/fragments',
     version,
     timestamp: new Date().toISOString(),
   }));
