@@ -1,0 +1,15 @@
+.github/
+.vscode/
+coverage/
+node_modules/
+tests/
+!tests/.htpasswd
+.env
+.env.debug
+env.jest
+eslint.config.mjs
+.git/
+.gitignore
+.prettier*
+jest*
+fragments-*.tgz
