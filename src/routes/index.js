@@ -40,6 +40,7 @@ router.get('/', (req, res) => {
       githubUrl: 'https://github.com/Operabanshee/fragments',
       version,
       timestamp: new Date().toISOString(),
+      uptime: Math.floor(process.uptime()),
     })
   );
 });
