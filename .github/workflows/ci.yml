@@ -76,3 +76,32 @@ jobs:
       - name: Install node dependencies and run Tests
         # Use `install-ci-test` to install dependencies with `npm ci` and run `npm test`
         run: npm install-ci-test
+
+  docker-hub:
+    name: Build and Push to Docker Hub
+    # Don't bother running this job unless the other three all pass
+    needs: [lint, dockerfile-lint, unit-tests]
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Docker Buildx for optimal Docker Builds
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # Login to Docker Hub using GitHub secrets
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build and Push an Image to Docker Hub
+      - name: Build and push
+        env:
+          # Replace `username` with your Docker Hub username and `fragments` with your repo name
+          DOCKERHUB_REPO: username/fragments
+          # Use the git commit sha as a tag
+          SHA_TAG: sha-${{ github.sha }}
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ${{ env.DOCKERHUB_REPO }}:${{ env.SHA_TAG }}, ${{ env.DOCKERHUB_REPO }}:main, ${{ env.DOCKERHUB_REPO }}:latest
