@@ -28,7 +28,8 @@ ENV PORT=8080
 ENV NPM_CONFIG_LOGLEVEL=warn
 ENV NPM_CONFIG_COLOR=false
 
-# Copy production node_modules and source from the builder stage
+# Copy production node_modules, package metadata, and source from the builder stage
+COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tests/.htpasswd ./tests/.htpasswd
