@@ -98,7 +98,7 @@ jobs:
       - name: Build and push
         env:
           # Replace `username` with your Docker Hub username and `fragments` with your repo name
-          DOCKERHUB_REPO: username/fragments
+          DOCKERHUB_REPO: operabanshee/fragments
           # Use the git commit sha as a tag
           SHA_TAG: sha-${{ github.sha }}
         uses: docker/build-push-action@v7
