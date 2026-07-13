@@ -14,7 +14,7 @@ const {
   deleteFragment,
 } = require('./data');
 
-const SUPPORTED_TEXT_TYPES = ['text/plain'];
+const SUPPORTED_APPLICATION_TYPES = ['application/json'];
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
@@ -143,6 +143,14 @@ class Fragment {
       return ['text/plain'];
     }
 
+    if (this.mimeType === 'text/markdown') {
+      return ['text/markdown', 'text/html'];
+    }
+
+    if (this.mimeType === 'application/json') {
+      return ['application/json'];
+    }
+
     return [];
   }
 
@@ -158,7 +166,7 @@ class Fragment {
 
     try {
       const { type } = contentType.parse(value);
-      return SUPPORTED_TEXT_TYPES.includes(type);
+      return type.startsWith('text/') || SUPPORTED_APPLICATION_TYPES.includes(type);
     } catch {
       return false;
     }

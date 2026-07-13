@@ -5,6 +5,16 @@ const app = require('../../src/app');
 const auth = (req) => req.auth('test-user1@fragments-testing.com', 'test-password1');
 
 describe('POST /v1/fragments', () => {
+  test('unauthenticated requests are denied', async () => {
+    const res = await request(app)
+      .post('/v1/fragments')
+      .set('Content-Type', 'text/plain')
+      .send('hello world');
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.status).toBe('error');
+  });
+
   test('authenticated users can create a text fragment', async () => {
     const res = await auth(request(app).post('/v1/fragments'))
       .set('Content-Type', 'text/plain')
@@ -20,10 +30,30 @@ describe('POST /v1/fragments', () => {
     );
   });
 
-  test('unsupported content types are rejected', async () => {
+  test('authenticated users can create a json fragment', async () => {
     const res = await auth(request(app).post('/v1/fragments'))
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({ hello: 'world' }));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.type).toBe('application/json');
+  });
+
+  test('authenticated users can create a markdown fragment', async () => {
+    const res = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'text/markdown')
+      .send('# hello');
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.type).toBe('text/markdown');
+  });
+
+  test('unsupported content types are rejected', async () => {
+    const res = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'image/png')
+      .send('not-an-image');
 
     expect(res.statusCode).toBe(415);
     expect(res.body.status).toBe('error');

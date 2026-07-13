@@ -20,5 +20,21 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
+  test('server errors return a 500 error response', async () => {
+    const fragmentModule = require('../../src/model/fragment');
+    const byUserSpy = jest
+      .spyOn(fragmentModule.Fragment, 'byUser')
+      .mockRejectedValueOnce(new Error('boom'));
+
+    const res = await request(app)
+      .get('/v1/fragments')
+      .auth('test-user1@fragments-testing.com', 'test-password1');
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body.status).toBe('error');
+
+    byUserSpy.mockRestore();
+  });
+
   // TODO: we'll need to add tests to check the contents of the fragments array later
 });

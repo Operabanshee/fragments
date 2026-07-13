@@ -34,6 +34,39 @@ describe('GET /v1/fragments/:id', () => {
     expect(res.body.status).toBe('error');
   });
 
+  test('GET /v1/fragments/:id/info returns fragment metadata', async () => {
+    const postRes = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'text/plain')
+      .send('hello world');
+
+    const res = await auth(request(app).get(`/v1/fragments/${postRes.body.fragment.id}/info`));
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.id).toBe(postRes.body.fragment.id);
+    expect(res.body.fragment.type).toBe('text/plain');
+  });
+
+  test('GET /v1/fragments/:id/info returns 404 for missing fragment', async () => {
+    const res = await auth(
+      request(app).get('/v1/fragments/00000000-0000-0000-0000-000000000000/info')
+    );
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body.status).toBe('error');
+  });
+
+  test('markdown fragments can be converted to html using .html', async () => {
+    const postRes = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'text/markdown')
+      .send('# Hello');
+
+    const res = await auth(request(app).get(`/v1/fragments/${postRes.body.fragment.id}.html`));
+
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toContain('text/html');
+    expect(res.text).toContain('<h1>Hello</h1>');
+  });
+
   test('expand=1 returns full fragment metadata', async () => {
     const postRes = await auth(request(app).post('/v1/fragments'))
       .set('Content-Type', 'text/plain')
