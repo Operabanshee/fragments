@@ -12,6 +12,7 @@ router.post('/fragments', require('./post'));
 router.get('/fragments/:id/info', require('./get-info'));
 router.get('/fragments/:id.:ext', require('./get-by-id'));
 router.get('/fragments/:id', require('./get-by-id'));
+router.delete('/fragments/:id', require('./delete'));
 // Other routes (PUT, DELETE, etc.) will go here later on...
 
 module.exports = router;

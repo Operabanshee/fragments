@@ -28,7 +28,7 @@
   "homepage": "https://github.com/Operabanshee/fragments#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@orangeopensource/hurl": "^8.0.2",
+    "@orangeopensource/hurl": "^8.0.3",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
     "jest": "^30.4.2",
@@ -36,6 +36,7 @@
     "supertest": "^7.2.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1095.0",
     "aws-jwt-verify": "^5.1.1",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
