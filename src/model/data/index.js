@@ -3,7 +3,7 @@ const logger = require('../../logger');
 // If the environment sets an AWS Region, we'll use AWS storage services.
 const { AWS_REGION } = process.env;
 if (!AWS_REGION) {
-	logger.warn('No AWS_REGION environment variable set. Using MemoryDB vs. AWS storage');
+  logger.warn('No AWS_REGION environment variable set. Using MemoryDB vs. AWS storage');
 }
 
 module.exports = AWS_REGION ? require('./aws') : require('./memory');
