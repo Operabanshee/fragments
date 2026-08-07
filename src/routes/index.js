@@ -1,4 +1,5 @@
 const express = require('express');
+const { hostname } = require('os');
 
 // Our authentication middleware
 const { authenticate } = require('../auth');
@@ -37,9 +38,10 @@ router.get('/', (req, res) => {
     createSuccessResponse({
       description: 'fragments service running normally',
       author,
-      githubUrl: 'https://github.com/Operabanshee/fragments',
+      githubUrl: 'https://github.com/operabanshee/fragments',
       version,
       timestamp: new Date().toISOString(),
+      hostname: hostname(),
       uptime: Math.floor(process.uptime()),
     })
   );
