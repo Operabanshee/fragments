@@ -170,7 +170,11 @@ class Fragment {
 
     try {
       const { type } = contentType.parse(value);
-      return type.startsWith('text/') || type.startsWith('image/') || SUPPORTED_APPLICATION_TYPES.includes(type);
+      return (
+        type.startsWith('text/') ||
+        type.startsWith('image/') ||
+        SUPPORTED_APPLICATION_TYPES.includes(type)
+      );
     } catch {
       return false;
     }

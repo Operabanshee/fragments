@@ -4,13 +4,7 @@ const { Fragment } = require('../../src/model/fragment');
 // if it isn't long enough for your test runs. Returns a Promise.
 const wait = async (ms = 50) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const validTypes = [
-  `text/plain`,
-  `text/markdown`,
-  `text/html`,
-  `text/csv`,
-  `application/json`,
-];
+const validTypes = [`text/plain`, `text/markdown`, `text/html`, `text/csv`, `application/json`];
 
 describe('Fragment class', () => {
   test('common formats are supported', () => {
