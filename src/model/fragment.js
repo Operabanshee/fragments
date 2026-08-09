@@ -151,6 +151,10 @@ class Fragment {
       return ['application/json'];
     }
 
+    if (this.mimeType.startsWith('image/')) {
+      return [this.mimeType];
+    }
+
     return [];
   }
 
@@ -166,7 +170,7 @@ class Fragment {
 
     try {
       const { type } = contentType.parse(value);
-      return type.startsWith('text/') || SUPPORTED_APPLICATION_TYPES.includes(type);
+      return type.startsWith('text/') || type.startsWith('image/') || SUPPORTED_APPLICATION_TYPES.includes(type);
     } catch {
       return false;
     }

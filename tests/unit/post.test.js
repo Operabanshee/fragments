@@ -50,10 +50,20 @@ describe('POST /v1/fragments', () => {
     expect(res.body.fragment.type).toBe('text/markdown');
   });
 
-  test('unsupported content types are rejected', async () => {
+  test('authenticated users can create an image fragment', async () => {
     const res = await auth(request(app).post('/v1/fragments'))
       .set('Content-Type', 'image/png')
-      .send('not-an-image');
+      .send(Buffer.from('fake-png-data'));
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment.type).toBe('image/png');
+  });
+
+  test('unsupported content types are rejected', async () => {
+    const res = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'application/pdf')
+      .send('not-a-pdf');
 
     expect(res.statusCode).toBe(415);
     expect(res.body.status).toBe('error');

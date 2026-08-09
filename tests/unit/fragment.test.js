@@ -116,12 +116,15 @@ describe('Fragment class', () => {
       expect(Fragment.isSupportedType('text/plain; charset=utf-8')).toBe(true);
     });
 
+    test('image types are supported', () => {
+      expect(Fragment.isSupportedType('image/png')).toBe(true);
+    });
+
     test('other types are not supported', () => {
       expect(Fragment.isSupportedType('application/octet-stream')).toBe(false);
       expect(Fragment.isSupportedType('application/msword')).toBe(false);
       expect(Fragment.isSupportedType('audio/webm')).toBe(false);
       expect(Fragment.isSupportedType('video/ogg')).toBe(false);
-      expect(Fragment.isSupportedType('image/png')).toBe(false);
     });
   });
 
