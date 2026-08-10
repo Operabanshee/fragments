@@ -48,8 +48,9 @@ module.exports.strategy = () =>
       const user = await jwtVerifier.verify(token);
       logger.debug({ user }, 'verified user token');
 
-      // Create a user, but only bother with their email
-      done(null, user.email);
+      // Prefer email when present, otherwise use sub as a stable user identity.
+      const ownerId = user.email || user.sub;
+      done(null, ownerId || false);
     } catch (err) {
       logger.error({ err, token }, 'could not verify token');
       done(null, false);
