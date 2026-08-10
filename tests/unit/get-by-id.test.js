@@ -1,4 +1,5 @@
 const request = require('supertest');
+const sharp = require('sharp');
 
 const app = require('../../src/app');
 
@@ -65,6 +66,29 @@ describe('GET /v1/fragments/:id', () => {
     expect(res.statusCode).toBe(200);
     expect(res.headers['content-type']).toContain('text/html');
     expect(res.text).toContain('<h1>Hello</h1>');
+  });
+
+  test('image fragments can be converted using image extensions', async () => {
+    const onePixelPng = await sharp({
+      create: {
+        width: 1,
+        height: 1,
+        channels: 3,
+        background: { r: 0, g: 0, b: 0 },
+      },
+    })
+      .png()
+      .toBuffer();
+
+    const postRes = await auth(request(app).post('/v1/fragments'))
+      .set('Content-Type', 'image/png')
+      .send(onePixelPng);
+
+    const res = await auth(request(app).get(`/v1/fragments/${postRes.body.fragment.id}.jpeg`));
+
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toContain('image/jpeg');
+    expect(res.body.length).toBeGreaterThan(0);
   });
 
   test('expand=1 returns full fragment metadata', async () => {
